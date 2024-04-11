@@ -1,77 +1,112 @@
-package com.kuko.project4_2;
+package com.kuko.project5_2;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
 public class MainActivity extends AppCompatActivity {
-    TextView text1, text2;
-    CheckBox chkAgree;
-    RadioGroup rGroup1;
-    RadioButton rdoDog, rdoCat, rdoRabbit;
-    Button btnOK;
-    ImageView imgPet;
+    EditText edit1, edit2;
+    Button btnAdd, btnSub, btnMul, btnDiv;
+    TextView textResult;
+    String num1, num2;
+    Integer result;
+    Button[] numButtons = new Button[10];
+    Integer[] numBtnIDs = { R.id.BtnNum0, R.id.BtnNum1, R.id.BtnNum2, R.id .BtnNum3,
+            R.id.BtnNum4, R.id.BtnNum5, R.id.BtnNum6, R.id.BtnNum7,
+            R.id.BtnNum8, R.id.BtnNum9};
+    int i;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("애완동물 사진 보기");
-        text1 =(TextView) findViewById(R.id.Text1);
-        chkAgree = (CheckBox) findViewById(R.id.ChkAgree);
 
-        text2 =(TextView) findViewById(R.id.Text2);
-        rGroup1 = (RadioGroup) findViewById(R.id.Rgroup1);
-        rdoDog = (RadioButton) findViewById(R.id.RdoDog);
-        rdoCat = (RadioButton)findViewById(R.id.RdoCat);
-        rdoRabbit = (RadioButton)findViewById(R.id.RdoRabbit);
-        btnOK =(Button) findViewById(R.id.BtnOK);
-        imgPet = (ImageView) findViewById(R.id.ImgPet);
+        setTitle("테이블레이아웃 계산기");
 
-        // 为复选框设置状态改变监听器
-        chkAgree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (chkAgree.isChecked()==true) {
-                    // 显示相关视图
-                    text2.setVisibility(android.view.View.VISIBLE);
-                    rGroup1.setVisibility(android.view.View.VISIBLE);
-                    btnOK.setVisibility(android.view.View.VISIBLE);
-                    imgPet.setVisibility(android.view.View.VISIBLE);
+        edit1 = findViewById(R.id.Edit1);
+        edit2 = findViewById(R.id.Edit2);
+        btnAdd = findViewById(R.id.BtnAdd);
+        btnSub = findViewById(R.id.BtnSub);
+        btnMul = findViewById(R.id.BtnMul);
+        btnDiv = findViewById(R.id.BtnDiv);
+
+        textResult = findViewById(R.id.TextResult);
+
+        btnAdd.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                num1 = edit1.getText().toString();
+                num2 = edit2.getText().toString();
+                result = Integer.parseInt(num1) + Integer.parseInt(num2);
+                textResult.setText("계산 결과 :" + result.toString());
+                return false;
+            }
+        });
+
+        btnSub.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                num1 = edit1.getText().toString();
+                num2 = edit2.getText().toString();
+                result = Integer.parseInt(num1) - Integer.parseInt(num2);
+                textResult.setText("계산 결과 :" + result.toString());
+                return false;
+            }
+        });
+
+        btnMul.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                num1 = edit1.getText().toString();
+                num2 = edit2.getText().toString();
+                result = Integer.parseInt(num1) * Integer.parseInt(num2);
+                textResult.setText("계산 결과 :" + result.toString());
+                return false;
+            }
+        });
+
+        btnDiv.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                num1 = edit1.getText().toString();
+                num2 = edit2.getText().toString();
+                if (Integer.parseInt(num2) == 0) {
+                    textResult.setText("0으로 나눌 수 없습니다.");
                 } else {
-                    // 隐藏相关视图
-                    text2.setVisibility(android.view.View.INVISIBLE);
-                    rGroup1.setVisibility(android.view.View.INVISIBLE);
-                    btnOK.setVisibility(android.view.View.INVISIBLE);
-                    imgPet.setVisibility(android.view.View.INVISIBLE);
+                    result = Integer.parseInt(num1) / Integer.parseInt(num2);
+                    textResult.setText("계산 결과 :" + result.toString());
                 }
+                return false;
             }
         });
 
-        // 为确定按钮设置点击监听器
-        btnOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                int checkedRadio = rGroup1.getCheckedRadioButtonId();
-                if (checkedRadio == R.id.RdoDog)
-                    imgPet.setImageResource(R.drawable.dog);
-                else if (checkedRadio == R.id.RdoCat)
-                    imgPet.setImageResource(R.drawable.cat);
-                else if (checkedRadio == R.id.RdoRabbit)
-                    imgPet.setImageResource(R.drawable.rabbit);
-                else
-                    if (checkedRadio == -1)
-                    Toast.makeText(getApplicationContext(),"동물 먼저 선택하세요", Toast.LENGTH_SHORT).show();
+        for (i = 0;i < numBtnIDs .length; i++) {
+            numButtons[i] = (Button) findViewById(numBtnIDs[i]);
+        }
+        for (i = 0;i < numBtnIDs .length; i++) {
+            final int index; //주의! 꼭 필요함
+            index = i;
 
-            }
-        });
+            numButtons[index].setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    if (edit1.isFocused() == true) {
+                        num1 = edit1.getText().toString()
+                                + numButtons[index].getText().toString();
+                        edit1.setText(num1);
+                    } else if (edit2.isFocused() == true) {
+                        num2 = edit2.getText().toString()
+                                + numButtons[index].getText().toString();
+                        edit2.setText(num2);
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "먼저 에디트텍스트를 선택하세요", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
     }
 }
